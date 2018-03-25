@@ -1987,6 +1987,15 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 								$col_val = $step_id;
 							}
 						break;
+						case 'workflow_final_status':
+							if( $item[ $column_key ] == 'pending' ) {
+								$duration     = time() - strtotime( $item['date_created'] );
+								$duration_str = ' ' . $this->format_duration( $duration );
+								$col_val = $item[ $column_key ] . $duration_str;
+							} else {
+								$col_val = $item[ $column_key ];
+							}
+						break;
 						default :
 							$col_val = $item[ $column_key ];
 					}
