@@ -1827,6 +1827,11 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	 */
 	public function export_column_names( $echo = true ) {
 		$columns    = $this->get_columns();
+
+		if ( isset( $columns['workflow_final_status'] ) ) {
+			$columns['duration'] = esc_html__( 'Duration', 'gravityflow' );
+		}
+
 		$export_arr = array();
 
 		foreach ( $columns as $key => $column_title ) {
@@ -1948,6 +1953,9 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$export      = '';
 		$rows        = array();
 		$columns     = $this->get_columns();
+		if ( isset( $columns['workflow_final_status'] ) ) {
+			$columns['duration'] = esc_html__( 'Duration', 'gravityflow' );
+		}
 		$column_keys = array_keys( $columns );
 
 		if ( ( $cb = array_search( 'cb', $column_keys ) ) !== false ) {
@@ -1987,18 +1995,21 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 								$col_val = $step_id;
 							}
 						break;
-						case 'workflow_final_status':
-							if( $item[ $column_key ] == 'pending' ) {
-								$duration     = time() - strtotime( $item['date_created'] );
-								$duration_str = ' ' . $this->format_duration( $duration );
-								$col_val = $item[ $column_key ] . $duration_str;
-							} else {
-								$col_val = $item[ $column_key ];
-							}
-						break;
 						default :
 							$col_val = $item[ $column_key ];
 					}
+				} else {
+					switch ( $column_key ) {
+						case 'duration':
+							if( $item[ 'workflow_final_status' ] == 'pending' ) {
+								$duration     = time() - strtotime( $item['date_created'] );
+								$duration_str = $this->format_duration( $duration );
+								$col_val = $item[ $column_key ] . $duration_str;
+							} else {
+								$col_val = "";
+							}
+						break;
+					}	
 				}
 
 				/**
