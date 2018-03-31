@@ -1990,7 +1990,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 							$step_id = rgar( $item, 'workflow_step' );
 							if ( $step_id > 0 ) {
 								$step      = gravity_flow()->get_step( $step_id );
-								$col_val = $step->get_name();
+								$col_val = $step ? $step->get_name() : $step_id;
 							} else {
 								$col_val = $step_id;
 							}
@@ -2006,7 +2006,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 								$duration_str = $this->format_duration( $duration );
 								$col_val = $item[ $column_key ] . $duration_str;
 							} else {
-								$col_val = "";
+								$col_val = '';
 							}
 						break;
 					}	
