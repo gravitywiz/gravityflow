@@ -1829,7 +1829,8 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$columns    = $this->get_columns();
 
 		if ( isset( $columns['workflow_final_status'] ) ) {
-			$columns['duration'] = esc_html__( 'Duration', 'gravityflow' );
+			$final_status_offset = array_search('workflow_final_status',array_keys($columns)) + 1;
+			$columns = array_slice($columns, 0, $final_status_offset, true) + array('duration' => esc_html__( 'Duration', 'gravityflow' )) + array_slice($columns, $final_status_offset, NULL, true);
 		}
 
 		$export_arr = array();
@@ -1954,7 +1955,8 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$rows        = array();
 		$columns     = $this->get_columns();
 		if ( isset( $columns['workflow_final_status'] ) ) {
-			$columns['duration'] = esc_html__( 'Duration', 'gravityflow' );
+			$final_status_offset = array_search('workflow_final_status',array_keys($columns)) + 1;
+			$columns = array_slice($columns, 0, $final_status_offset, true) + array('duration' => esc_html__( 'Duration', 'gravityflow' )) + array_slice($columns, $final_status_offset, NULL, true);
 		}
 		$column_keys = array_keys( $columns );
 
@@ -2004,7 +2006,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 							if( $item[ 'workflow_final_status' ] == 'pending' ) {
 								$duration     = time() - strtotime( $item['date_created'] );
 								$duration_str = $this->format_duration( $duration );
-								$col_val = $item[ $column_key ] . $duration_str;
+								$col_val = $duration_str;
 							} else {
 								$col_val = '';
 							}
